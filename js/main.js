@@ -17,8 +17,27 @@ function snapshot() {
 	}
 }
 
+var idx = 0;
+var filters = ['grayscale', 'sepia', 'blur'];
+
+function changeFilter() {
+	var el = document.querySelector("video");
+	el.className = "";
+	var effect = filters[idx++ % filters.length];
+	if (effect) {
+		el.classList.add(effect);
+	}
+}
+
+function downloadImage() {
+	var img = document.getElementById('snapshot');
+	window.location.href = img.src.replace('image/png', 'image/octet-stream');
+}
+
 document.getElementById("snapshot-button").addEventListener('click', snapshot, false);
-console.log(document.querySelector('img').src);
+document.getElementById('effect-button').addEventListener('click', changeFilter, false);
+document.getElementById('download-button').addEventListener('click', downloadImage, false);
+
 
 // Video Constraints
 var hdConstraints = {
@@ -41,9 +60,6 @@ var vgaConstraints = {
   audio: true
 };
 
-var idx = 0;
-var filters = ['grayscale', 'sepia', 'blur'];
-
 function success(stream) {
     video.src = window.URL.createObjectURL(stream);
     localMediaStream = stream;
@@ -56,18 +72,6 @@ function errorCallback(e) {
 function fallback(error) {
 	video.src = 'fallbackvideo.webm';
 }
-
-function changeFilter(e) {
-	var el = e.target;
-	el.className = "";
-	var effect = filters[idx++ % filters.length];
-	if (effect) {
-		el.classList.add(effect);
-	}
-}
-
-document.querySelector('video').addEventListener(
-	'click', changeFilter, false);
 
 if (navigator.getUserMedia) {
 	navigator.getUserMedia(vgaConstraints, success, errorCallback);
