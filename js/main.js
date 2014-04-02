@@ -3,19 +3,22 @@ navigator.getUserMedia  = navigator.getUserMedia ||
                           navigator.mozGetUserMedia ||
                           navigator.msGetUserMedia;
 
-var video = document.querySelector('video#video1');
+var video = document.querySelector('video');
 var canvas = document.querySelector('canvas');
 var ctx = canvas.getContext('2d');
 var localMediaStream = null;
 
 function snapshot() {
 	if (localMediaStream) {
-		ctx.drawImage(video, 0, 0);
+		canvas.width = 400;
+		canvas.height = 300;
+		ctx.drawImage(video, 0, 0, 640, 480, 0, 0, 400, 300);
 		document.querySelector('img').src = canvas.toDataURL('image/webp');
 	}
 }
 
-video.addEventListener('click', snapshot, false);
+document.getElementById("snapshot-button").addEventListener('click', snapshot, false);
+console.log(document.querySelector('img').src);
 
 // Video Constraints
 var hdConstraints = {
@@ -63,7 +66,7 @@ function changeFilter(e) {
 	}
 }
 
-document.querySelector('video#video1').addEventListener(
+document.querySelector('video').addEventListener(
 	'click', changeFilter, false);
 
 if (navigator.getUserMedia) {
